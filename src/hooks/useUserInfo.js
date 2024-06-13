@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo, setError } from '../redux/modules/userSlice';
+import { setUserInfo, setError, clearUserInfo } from '../redux/modules/userSlice';
 import { loginApi } from '../axios/api';
 
 const useUserInfo = () => {
@@ -31,6 +31,12 @@ const useUserInfo = () => {
 
         fetchUserInfo();
     }, [isLoggedIn, userInfo, dispatch]);
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            dispatch(clearUserInfo());
+        }
+    }, [isLoggedIn, dispatch]);
 
     return userInfo;
 };

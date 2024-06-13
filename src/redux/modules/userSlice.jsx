@@ -18,9 +18,13 @@ const userSlice = createSlice({
                 state.userInfo.nickname = action.payload;
             }
         },
+        clearUserInfo: (state) => {
+            state.userInfo = null;
+            state.error = null;
+        },
     },
 });
 
-export const { setUserInfo, setError, updateNicknameSuccess } = userSlice.actions;
+export const { setUserInfo, setError, updateNicknameSuccess, clearUserInfo } = userSlice.actions;
 
 export default userSlice.reducer;

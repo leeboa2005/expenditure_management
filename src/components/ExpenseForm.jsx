@@ -50,8 +50,6 @@ const ExpenseForm = ({ onExpenseData }) => {
     const descriptionRef = useRef(null);
     const user = JSON.parse(localStorage.getItem('user')); // 사용자 정보 가져오기
 
-    console.log('User:', user); // 사용자 정보 콘솔에 출력
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -80,8 +78,6 @@ const ExpenseForm = ({ onExpenseData }) => {
             createdBy: user.nickname,
             userId: user.id,
         };
-
-        console.log('Expense Data:', expenseData);
 
         onExpenseData(expenseData);
 

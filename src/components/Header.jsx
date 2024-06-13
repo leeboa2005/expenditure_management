@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/modules/authSlice';
 import useUserInfo from '../hooks/useUserInfo';
+import { clearUserInfo } from '../redux/modules/userSlice';
 
 const StyledHeader = styled.header`
     width: var(--default-width);
@@ -47,6 +48,7 @@ const Header = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        dispatch(clearUserInfo());
         navigate('/login');
     };
 

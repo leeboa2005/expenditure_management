@@ -55,6 +55,11 @@ const SignUpForm = styled.div`
                 background-color: var(--main-hover-color);
             }
         }
+        p.notice {
+            color: #cf0606;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
     }
 `;
 
@@ -63,24 +68,61 @@ const Signup = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
+    // 유효성 검사 함수
+    const validateForm = () => {
+        const errors = {};
+        if (!nickname.trim()) {
+            errors.nickname = '닉네임을 입력해주세요.';
+        }
+        if (!id.trim()) {
+            errors.id = '아이디를 입력해주세요.';
+        }
+        if (!password.trim()) {
+            errors.password = '비밀번호를 입력해주세요.';
+        } else {
+            const hasTwoLetters = /[a-zA-Z].*[a-zA-Z]/.test(password); // 최소 두 개의 영문자가 포함되어 있는지 확인
+            if (!hasTwoLetters) {
+                errors.password = '비밀번호에는 최소 두 개의 영문자가 포함되어야 합니다.';
+            }
+            if (password.length < 6) {
+                errors.password = '비밀번호는 최소 6자리여야 합니다.';
+            }
+        }
+        if (password !== confirmPassword) {
+            errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+        }
+        return errors;
+    };
+
+    // 회원가입 처리 함수
     const handleSignUp = async (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+        const validationErrors = validateForm(); // 유효성 검사 실행
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
             return;
         }
 
         try {
-            const response = await loginApi.post('/register', {
-                id,
-                password,
-                nickname,
-            });
+            const response = await loginApi.post(
+                '/register',
+                {
+                    id,
+                    password,
+                    nickname,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
             const data = response.data;
             if (data.success) {
-                navigate('/login');
+                navigate('/login'); // 회원가입 성공 시 로그인 페이지로 이동
             } else {
                 alert('회원가입 실패하였습니다.');
             }
@@ -103,8 +145,10 @@ const Signup = () => {
                     onChange={(e) => setNickname(e.target.value)}
                     placeholder="닉네임"
                 />
+                {errors.nickname && <p className="notice">{errors.nickname}</p>}
                 <label htmlFor="id">아이디</label>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
+                {errors.id && <p className="notice">{errors.id}</p>}
                 <label htmlFor="password">비밀번호</label>
                 <input
                     type="password"
@@ -112,6 +156,7 @@ const Signup = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="비밀번호"
                 />
+                {errors.password && <p className="notice">{errors.password}</p>}
                 <label htmlFor="confirmPassword">비밀번호 확인</label>
                 <input
                     type="password"
@@ -119,6 +164,7 @@ const Signup = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="비밀번호 확인"
                 />
+                {errors.confirmPassword && <p className="notice">{errors.confirmPassword}</p>}
                 <button type="submit">회원가입</button>
             </form>
         </SignUpForm>

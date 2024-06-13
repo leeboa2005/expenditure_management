@@ -56,6 +56,11 @@ const LoginForm = styled.div`
                 background-color: var(--main-hover-color);
             }
         }
+        p.notice {
+            color: #cf0606;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
     }
 `;
 
@@ -77,24 +82,36 @@ const Login = () => {
     const dispatch = useDispatch();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        const errors = {};
+        if (!id.trim()) {
+            errors.id = '아이디를 입력해주세요.';
+        }
+        if (!password.trim()) {
+            errors.password = '비밀번호를 입력해주세요.';
+        }
+        return errors;
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await loginApi.post('/login', {
-                id,
-                password,
-            });
-            const data = response.data;
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
-            // 서버 응답 확인용 콘솔 로그
-            console.log('Login Response:', data);
+        try {
+            const response = await loginApi.post('/login', { id, password });
+            const data = response.data;
 
             if (data.success) {
                 localStorage.setItem(
                     'user',
                     JSON.stringify({
-                        id: data.id,
+                        id: data.userId,
                         nickname: data.nickname,
                         accessToken: data.accessToken,
                     })
@@ -119,6 +136,7 @@ const Login = () => {
             <form onSubmit={handleLogin}>
                 <label>아이디</label>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="아이디" />
+                {errors.id && <p className="notice">{errors.id}</p>}
                 <label>비밀번호</label>
                 <input
                     type="password"
@@ -126,6 +144,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="비밀번호"
                 />
+                {errors.password && <p className="notice">{errors.password}</p>}
                 <button type="submit">로그인</button>
             </form>
             <SignUpLink>

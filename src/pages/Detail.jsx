@@ -188,9 +188,6 @@ const Detail = () => {
         return <div>항목을 찾을 수 없습니다.</div>;
     }
 
-    console.log('Expense User ID:', editedExpense); // userId 확인용 콘솔 로그
-    console.log('Current User ID:', userInfo ? userInfo.id : null); // 현재 사용자 ID 확인용 콘솔 로그
-
     const isAuthor = userInfo && userInfo.id === editedExpense.userId;
 
     return (
