@@ -1,21 +1,37 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import Home from '../pages/Home';
 import Detail from '../pages/Detail';
-import Layout from '../shared/Layout';
-import { useSelector } from 'react-redux'; // Redux의 useSelector를 사용합니다.
+import Signup from '../pages/Signup';
+import Login from '../pages/Login';
+import BasicLayout from './BasicLayout';
+import ContentLayout from './ContentLayout';
+import MyPage from '../pages/Mypage';
+import { checkAuth } from '../redux/modules/authSlice';
 
 const Router = () => {
-    const selectExpenseData = (state) => state.expenseData.items; // Redux state에서 expenseData를 가져옵니다.
-    const expenseData = useSelector(selectExpenseData);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(checkAuth());
+    }, [dispatch]);
 
     return (
         <BrowserRouter>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={<Home expenseData={expenseData} />} />
-                    <Route path="/detail/:id" element={<Detail expenseData={expenseData} />} />
-                </Routes>
-            </Layout>
+            <Routes>
+                <Route element={<ContentLayout />}>
+                    <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+                    <Route path="/detail/:id" element={isAuthenticated ? <Detail /> : <Navigate to="/login" />} />
+                    <Route path="/mypage" element={isAuthenticated ? <MyPage /> : <Navigate to="/login" />} />
+                </Route>
+                <Route element={<BasicLayout />}>
+                    <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+                    <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
+                </Route>
+                <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} />} />
+            </Routes>
         </BrowserRouter>
     );
 };

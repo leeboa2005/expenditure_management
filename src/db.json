@@ -1,0 +1,108 @@
+{
+  "expenses": [
+    {
+      "id": "25600f72-56b4-41a7-a9c2-47358580e2f8",
+      "date": "2024-01-05",
+      "item": "식비",
+      "amount": 100000,
+      "description": "세광양대창",
+      "createdBy": "user1"
+    },
+    {
+      "id": "25600f72-53b4-4187-a9c2-47358580e2f8",
+      "date": "2024-01-10",
+      "item": "도서",
+      "amount": 40500,
+      "description": "모던 자바스크립트",
+      "createdBy": "user2"
+    },
+    {
+      "id": "24310f72-56b4-41a7-a9c2-458580ef1f8",
+      "date": "2024-02-01",
+      "item": "식비",
+      "amount": 50000,
+      "description": "회식",
+      "createdBy": "user3"
+    },
+    {
+      "id": "25600f72-99b4-41z7-e4h6-47312365e2f8",
+      "date": "2024-02-02",
+      "item": "간식",
+      "amount": 2000,
+      "description": "아이스크림",
+      "createdBy": "user4"
+    },
+    {
+      "id": "25143e72-16e2-22a7-a9c2-47358580e2f8",
+      "date": "2024-02-13",
+      "item": "여행",
+      "amount": 1055000,
+      "description": "홍콩여행",
+      "createdBy": "user5"
+    },
+    {
+      "id": "25600f72-97p2-14a7-a9c2-47363950e2t8",
+      "date": "2024-02-03",
+      "item": "미용",
+      "amount": 155000,
+      "description": "미용실",
+      "createdBy": "user6"
+    },
+    {
+      "id": "24312f70-97q2-14a7-a9c2-47132950e2t8",
+      "date": "2024-02-02",
+      "item": "교육",
+      "amount": 75000,
+      "description": "자율주행차량 운전주행모드 자동 전환용 인식률 90% 이상의 다중 센서 기반 운전자 상태 인식 및 상황 인식 원천 기술 개발",
+      "createdBy": "user7"
+    },
+    {
+      "id": "24312f70-97q2-14a7-a9c2-489132950e2t8",
+      "date": "2024-01-02",
+      "item": "운동",
+      "amount": 105000,
+      "description": "2개월 헬스장비",
+      "createdBy": "user8"
+    },
+    {
+      "id": "24312f70-97q2-14a7-a9c2-429123950e2t8",
+      "date": "2024-01-02",
+      "item": "쇼핑",
+      "amount": 80000,
+      "description": "원피스",
+      "createdBy": "user9"
+    },
+    {
+      "id": "aa674bca-25ec-4e4e-96ba-3273f70388a9",
+      "date": "2024-06-13",
+      "item": "식비",
+      "amount": 4050,
+      "description": "카스테라",
+      "createdBy": "유저123"
+    },
+    {
+      "id": "f3b4df06-62b2-4db2-971c-fa6cee81dde6",
+      "date": "2024-06-13",
+      "item": "도서",
+      "amount": 40600,
+      "description": "모던 자바스크립트2",
+      "createdBy": "유저"
+    },
+    {
+      "id": "d5a93be8-46be-4bca-8bf7-462f4111ab21",
+      "date": "2024-06-13",
+      "item": "도서",
+      "amount": 405002,
+      "description": "모던 자바스크립트3",
+      "createdBy": "유저"
+    },
+    {
+      "id": "e263f8ce-97eb-466a-b62f-a70bb1df8682",
+      "date": "2024-06-13",
+      "item": "도서",
+      "amount": 10000,
+      "description": "모던 자바스크립트222",
+      "createdBy": "유저"
+    }
+  ]
+}

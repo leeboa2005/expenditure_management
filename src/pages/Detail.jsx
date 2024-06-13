@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateExpenseData, deleteExpenseData } from '../redux/modules/expenseDataSlice';
 import styled from 'styled-components';
+import { useExpenseDetail } from '../hooks/useExpenseDetail';
+import useUserInfo from '../hooks/useUserInfo';
 
 const StyledDetail = styled.div`
     margin-top: 30px;
@@ -111,15 +111,20 @@ const ButtonGroup = styled.div`
 `;
 
 const Detail = () => {
-    const { id } = useParams(); // URL에서 id 파라미터를 가져옴
-    const navigate = useNavigate(); // 페이지 이동시 필요한 함수
-    const dispatch = useDispatch();
-    const expenseData = useSelector((state) => state.expenseData.items);
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { expenseQuery, updateExpenseMutation, deleteExpenseMutation } = useExpenseDetail(id);
+    const userInfo = useUserInfo();
 
-    const [isEditing, setIsEditing] = useState(false); // 편집 모드 초기값
-    const [editedExpense, setEditedExpense] = useState({ date: '', item: '', description: '', amount: 0 });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedExpense, setEditedExpense] = useState(null);
 
-    // 수정 버튼 클릭 시 편집 모드로 전환됨
+    useEffect(() => {
+        if (expenseQuery.data) {
+            setEditedExpense(expenseQuery.data);
+        }
+    }, [expenseQuery.data]);
+
     const handleEdit = () => {
         setIsEditing(true);
     };
@@ -130,30 +135,28 @@ const Detail = () => {
             return;
         }
 
-        // 금액이 0 이하인지 확인
         if (Number(editedExpense.amount) <= 0) {
             alert('금액은 0보다 커야 합니다.');
             return;
         }
 
-        dispatch(updateExpenseData({ id: id, updatedData: editedExpense }));
+        updateExpenseMutation.mutate({ id, updatedExpense: editedExpense });
         setIsEditing(false);
         alert('정상적으로 수정 되었습니다.');
         navigate('/');
     };
 
-    // 취소 버튼 클릭시 수정 모드 종료됨
     const handleCancel = () => {
-        // 수정 중인 내용을 초기값으로 되돌리기 위해 원래의 내용을 재설정
-        const originalExpense = expenseData.find((item) => item.id.toString() === id);
-        setEditedExpense(originalExpense);
         setIsEditing(false);
+        if (expenseQuery.data) {
+            setEditedExpense(expenseQuery.data);
+        }
     };
 
     const handleDelete = () => {
         const confirmed = window.confirm('정말 삭제하시겠습니까? 😮');
         if (confirmed) {
-            dispatch(deleteExpenseData(id));
+            deleteExpenseMutation.mutate(id);
             alert('삭제되었습니다. 👋');
             navigate('/');
         } else {
@@ -161,12 +164,10 @@ const Detail = () => {
         }
     };
 
-    // 뒤로가기 버튼 클릭시 이전 페이지로 이동
     const handleBack = () => {
         navigate(-1);
     };
 
-    // 입력 필드 값 변경 시 해당 값을 상태에 반영
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedExpense((prevExpense) => ({
@@ -175,81 +176,82 @@ const Detail = () => {
         }));
     };
 
-    // 지출 내역 데이터가 변경되거나 id 파라미터가 변경될 때 실행
-    useEffect(() => {
-        // id에 해당하는 지출 내역을 찾아 상태에 저장
-        const foundExpense = expenseData ? expenseData.find((item) => item.id.toString() === id) : null;
-        setEditedExpense(foundExpense ? { ...foundExpense } : { date: '', item: '', description: '', amount: '' });
-    }, [expenseData, id]);
+    if (expenseQuery.isLoading) {
+        return <div>로딩 중...</div>;
+    }
+
+    if (expenseQuery.isError) {
+        return <div>에러가 발생했습니다.</div>;
+    }
+
+    if (!editedExpense) {
+        return <div>항목을 찾을 수 없습니다.</div>;
+    }
+
+    console.log('Expense User ID:', editedExpense); // userId 확인용 콘솔 로그
+    console.log('Current User ID:', userInfo ? userInfo.id : null); // 현재 사용자 ID 확인용 콘솔 로그
+
+    const isAuthor = userInfo && userInfo.id === editedExpense.userId;
 
     return (
         <StyledDetail>
-            {/* 지출 내역이 있으면 내역을 보여주고, 없으면 메시지를 표시 */}
-            {editedExpense ? (
-                isEditing ? (
-                    // 수정 모드일 때
-                    <StyledDetailBox key={editedExpense.id}>
-                        <ModifyBox>
-                            <fieldset>
-                                <label htmlFor="date">날짜</label>
-                                <input
-                                    type="date"
-                                    name="date"
-                                    placeholder="YYYY-MM-DD"
-                                    value={editedExpense.date}
-                                    onChange={handleChange}
-                                />
-                            </fieldset>
-                            <fieldset>
-                                <label htmlFor="item">항목</label>
-                                <input
-                                    type="text"
-                                    name="item"
-                                    placeholder="지출 항목"
-                                    value={editedExpense.item}
-                                    onChange={handleChange}
-                                />
-                            </fieldset>
-                            <fieldset>
-                                <label htmlFor="amount">금액</label>
-                                <input
-                                    type="number"
-                                    name="amount"
-                                    placeholder="지출 금액"
-                                    value={editedExpense.amount}
-                                    onChange={handleChange}
-                                />
-                            </fieldset>
-                            <fieldset>
-                                <label htmlFor="description">내용</label>
-                                <input
-                                    type="text"
-                                    name="description"
-                                    placeholder="지출 내용"
-                                    value={editedExpense.description}
-                                    onChange={handleChange}
-                                />
-                            </fieldset>
-                        </ModifyBox>
-                    </StyledDetailBox>
-                ) : (
-                    // 수정 모드가 아닐 때
-                    <StyledDetailBox key={editedExpense.id}>
-                        <InfoBox>
-                            <p>{editedExpense.date}</p>
-                            <p>{`${editedExpense.item} - ${editedExpense.description}`}</p>
-                        </InfoBox>
-                        <span>{`${editedExpense.amount} 원`}</span>
-                    </StyledDetailBox>
-                )
+            {isEditing ? (
+                <StyledDetailBox key={editedExpense.id}>
+                    <ModifyBox>
+                        <fieldset>
+                            <label htmlFor="date">날짜</label>
+                            <input
+                                type="date"
+                                name="date"
+                                placeholder="YYYY-MM-DD"
+                                value={editedExpense.date}
+                                onChange={handleChange}
+                            />
+                        </fieldset>
+                        <fieldset>
+                            <label htmlFor="item">항목</label>
+                            <input
+                                type="text"
+                                name="item"
+                                placeholder="지출 항목"
+                                value={editedExpense.item}
+                                onChange={handleChange}
+                            />
+                        </fieldset>
+                        <fieldset>
+                            <label htmlFor="amount">금액</label>
+                            <input
+                                type="number"
+                                name="amount"
+                                placeholder="지출 금액"
+                                value={editedExpense.amount}
+                                onChange={handleChange}
+                            />
+                        </fieldset>
+                        <fieldset>
+                            <label htmlFor="description">내용</label>
+                            <input
+                                type="text"
+                                name="description"
+                                placeholder="지출 내용"
+                                value={editedExpense.description}
+                                onChange={handleChange}
+                            />
+                        </fieldset>
+                    </ModifyBox>
+                </StyledDetailBox>
             ) : (
-                <h2>항목을 찾을 수 없습니다.</h2>
+                <StyledDetailBox key={editedExpense.id}>
+                    <InfoBox>
+                        <p>{editedExpense.date}</p>
+                        <p>{`${editedExpense.item} - ${editedExpense.description}`}</p>
+                    </InfoBox>
+                    <span>{`${editedExpense.amount} 원`}</span>
+                </StyledDetailBox>
             )}
 
-            {/* 수정 모드 여부에 따라 다른 버튼 그룹을 렌더링 */}
             <ButtonGroup>
                 {isEditing ? (
-                    // 수정 모드일 때 저장 및 취소 버튼 표시
                     <>
                         <button className="save" onClick={handleSave}>
                             저장
@@ -259,14 +261,17 @@ const Detail = () => {
                         </button>
                     </>
                 ) : (
-                    // 수정 모드가 아닐 때 수정, 삭제, 뒤로가기 버튼 표시
                     <>
-                        <button className="edit" onClick={handleEdit}>
-                            수정
-                        </button>
-                        <button className="delete" onClick={handleDelete}>
-                            삭제
-                        </button>
+                        {isAuthor && (
+                            <>
+                                <button className="edit" onClick={handleEdit}>
+                                    수정
+                                </button>
+                                <button className="delete" onClick={handleDelete}>
+                                    삭제
+                                </button>
+                            </>
+                        )}
                         <button className="back" onClick={handleBack}>
                             뒤로가기
                         </button>

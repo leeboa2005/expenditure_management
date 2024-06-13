@@ -44,47 +44,47 @@ const StyledForm = styled.form`
 `;
 
 const ExpenseForm = ({ onExpenseData }) => {
-    // 처음 초기값 설정
     const dateRef = useRef(null);
     const itemRef = useRef(null);
     const amountRef = useRef(null);
     const descriptionRef = useRef(null);
+    const user = JSON.parse(localStorage.getItem('user')); // 사용자 정보 가져오기
+
+    console.log('User:', user); // 사용자 정보 콘솔에 출력
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // form value값 가져오기
         const id = uuidv4();
         const date = dateRef.current.value;
         const item = itemRef.current.value;
         const amount = amountRef.current.value;
         const description = descriptionRef.current.value;
 
-        // 입력값 모두 입력됬는지 확인
         if (!date || !item || !amount || !description) {
             alert('입력창을 모두 입력해주세요.');
             return;
         }
 
-        // 금액이 0 이하인지 확인
         if (Number(amount) <= 0) {
             alert('금액은 0보다 커야 합니다.');
             return;
         }
 
-        // 지출 데이터 객체를 생성
         const expenseData = {
             id,
             date,
             item,
             amount: Number(amount),
             description,
+            createdBy: user.nickname,
+            userId: user.id,
         };
 
-        // 부모 컴포넌트로 데이터 전달
+        console.log('Expense Data:', expenseData);
+
         onExpenseData(expenseData);
 
-        // 전달한뒤 폼 필드 초기화
         e.target.reset();
     };
 
@@ -113,7 +113,6 @@ const ExpenseForm = ({ onExpenseData }) => {
     );
 };
 
-// prop 타입 선언
 ExpenseForm.propTypes = {
     onExpenseData: PropTypes.func.isRequired,
 };
