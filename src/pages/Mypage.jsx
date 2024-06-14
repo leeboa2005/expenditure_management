@@ -70,18 +70,18 @@ const Button = styled.button`
 `;
 
 const MyPage = () => {
-    const [newNickname, setNewNickname] = useState('');
+    const [newNickname, setNewNickname] = useState(''); // 새로운 닉네임 상태
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userInfo = useSelector((state) => state.user.userInfo);
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const userInfo = useSelector((state) => state.user.userInfo); // 사용자 정보 상태
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // 인증 상태
 
-    useUserInfo();
+    useUserInfo(); // 사용자 정보 로드
 
     useEffect(() => {
         if (!isAuthenticated) {
             alert('로그인이 필요합니다.');
-            navigate('/login');
+            navigate('/login'); // 인증되지 않은 경우 로그인 페이지로 이동
         }
     }, [isAuthenticated, navigate]);
 
@@ -100,7 +100,7 @@ const MyPage = () => {
             });
 
             if (response.data.success) {
-                dispatch(updateNicknameSuccess(response.data.nickname));
+                dispatch(updateNicknameSuccess(response.data.nickname)); // 닉네임 업데이트
                 alert('닉네임이 변경되었습니다.');
                 setNewNickname('');
             } else {

@@ -110,26 +110,34 @@ const ButtonGroup = styled.div`
     }
 `;
 
+const LoadingContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+`;
+
 const Detail = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // URL에서 id 값을 가져옴
     const navigate = useNavigate();
     const { expenseQuery, updateExpenseMutation, deleteExpenseMutation } = useExpenseDetail(id);
-    const userInfo = useUserInfo();
+    const userInfo = useUserInfo(); // 사용자 정보 가져오기
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedExpense, setEditedExpense] = useState(null);
+    const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 관리
+    const [editedExpense, setEditedExpense] = useState(null); // 수정할 지출 항목 상태 관리
 
     useEffect(() => {
         if (expenseQuery.data) {
-            setEditedExpense(expenseQuery.data);
+            setEditedExpense(expenseQuery.data); // 지출 항목 데이터가 로드되면 상태 설정
         }
     }, [expenseQuery.data]);
 
     const handleEdit = () => {
-        setIsEditing(true);
+        setIsEditing(true); // 수정 모드로 전환
     };
 
     const handleSave = () => {
+        // 입력값 검증
         if (!editedExpense.date || !editedExpense.item || !editedExpense.description || !editedExpense.amount) {
             alert('입력창을 모두 입력해주세요.');
             return;
@@ -141,7 +149,7 @@ const Detail = () => {
         }
 
         updateExpenseMutation.mutate({ id, updatedExpense: editedExpense });
-        setIsEditing(false);
+        setIsEditing(false); // 수정 모드 취소
         alert('정상적으로 수정 되었습니다.');
         navigate('/');
     };
@@ -149,14 +157,14 @@ const Detail = () => {
     const handleCancel = () => {
         setIsEditing(false);
         if (expenseQuery.data) {
-            setEditedExpense(expenseQuery.data);
+            setEditedExpense(expenseQuery.data); // 원래 데이터로 복원
         }
     };
 
     const handleDelete = () => {
         const confirmed = window.confirm('정말 삭제하시겠습니까? 😮');
         if (confirmed) {
-            deleteExpenseMutation.mutate(id);
+            deleteExpenseMutation.mutate(id); // 지출 항목 삭제
             alert('삭제되었습니다. 👋');
             navigate('/');
         } else {
@@ -172,24 +180,27 @@ const Detail = () => {
         const { name, value } = e.target;
         setEditedExpense((prevExpense) => ({
             ...prevExpense,
-            [name]: name === 'amount' ? (value ? parseInt(value) : '') : value,
+            [name]: name === 'amount' ? (value ? parseInt(value) : '') : value, // 입력 값 업데이트
         }));
     };
 
     if (expenseQuery.isLoading) {
-        return <div>로딩 중...</div>;
+        return (
+            <LoadingContainer>
+                <img src="/loading.gif" alt="로딩 중" />
+            </LoadingContainer>
+        );
     }
 
     if (expenseQuery.isError) {
-        return <div>에러가 발생했습니다.</div>;
+        return <div>에러가 발생했습니다.</div>; // 에러 메시지 표시
     }
 
     if (!editedExpense) {
-        return <div>항목을 찾을 수 없습니다.</div>;
+        return <div>항목을 찾을 수 없습니다.</div>; // 항목을 찾을 수 없을 때 메세지 표시
     }
 
-    const isAuthor = userInfo && userInfo.id === editedExpense.userId;
-
+    const isAuthor = userInfo && userInfo.id === editedExpense.userId; // 현재 사용자가 항목 작성자인지 확인
     return (
         <StyledDetail>
             {isEditing ? (

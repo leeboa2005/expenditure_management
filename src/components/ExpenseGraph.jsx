@@ -115,16 +115,19 @@ const ImageContainer = styled.div`
 const ExpenseGraph = ({ expenseData = [], selectedMonth }) => {
     const [animationReady, setAnimationReady] = useState(false);
 
+    // 데이터 변경 시 애니메이션 초기화
     useEffect(() => {
         setAnimationReady(false);
         const timeout = setTimeout(() => setAnimationReady(true), 200);
         return () => clearTimeout(timeout);
     }, [expenseData, selectedMonth]);
 
+    // 선택된 월의 데이터 필터링
     const filteredExpenseData = expenseData.filter((item) => {
         return new Date(item.date).getMonth() + 1 === selectedMonth;
     });
 
+    // 카테고리별 데이터 집계
     const categorizedData = filteredExpenseData.reduce((accumulated, expense) => {
         const { item, amount } = expense;
         if (item && amount) {
@@ -136,6 +139,7 @@ const ExpenseGraph = ({ expenseData = [], selectedMonth }) => {
         return accumulated;
     }, {});
 
+    // 데이터를 금액 순으로 정렬
     const sortedData = Object.entries(categorizedData).sort(([, amountA], [, amountB]) => amountB - amountA);
     const totalAmount = Object.values(categorizedData).reduce((accumulated, amount) => accumulated + amount, 0);
 

@@ -50,6 +50,7 @@ const ExpenseForm = ({ onExpenseData }) => {
     const descriptionRef = useRef(null);
     const user = JSON.parse(localStorage.getItem('user')); // 사용자 정보 가져오기
 
+    // 폼 제출 처리 함수
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -59,6 +60,7 @@ const ExpenseForm = ({ onExpenseData }) => {
         const amount = amountRef.current.value;
         const description = descriptionRef.current.value;
 
+        // 입력값 유효성 검사
         if (!date || !item || !amount || !description) {
             alert('입력창을 모두 입력해주세요.');
             return;
@@ -79,9 +81,8 @@ const ExpenseForm = ({ onExpenseData }) => {
             userId: user.id,
         };
 
-        onExpenseData(expenseData);
-
-        e.target.reset();
+        onExpenseData(expenseData); // 부모 컴포넌트로 데이터 전달
+        e.target.reset(); // 폼 초기화
     };
 
     return (

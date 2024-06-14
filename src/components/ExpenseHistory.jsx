@@ -57,7 +57,7 @@ const ExpenseHistory = ({ expenseData = [] }) => {
     const navigate = useNavigate();
 
     const handleClick = (id) => {
-        navigate(`/detail/${id}`);
+        navigate(`/detail/${id}`); // 특정 지출 항목의 ID를 사용하여 상세 페이지로 이동
     };
 
     return (

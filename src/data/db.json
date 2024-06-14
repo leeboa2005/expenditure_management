@@ -14,13 +14,13 @@
       "date": "2024-01-10",
       "item": "도서",
       "amount": 40500,
-      "description": "파이탄의 도구",
+      "description": "타이탄의 도구",
       "createdBy": "유저2",
       "userId": "byebye"
     },
     {
       "id": "24310f72-56b4-41a7-a9c2-458580ef1f8",
-      "date": "2024-02-02",
+      "date": "2024-02-10",
       "item": "식비",
       "amount": 50000,
       "description": "회식",
@@ -29,9 +29,9 @@
     },
     {
       "id": "25600f72-99b4-41z7-e4h6-47312365e2f8",
-      "date": "2024-02-02",
+      "date": "2024-02-22",
       "item": "간식",
-      "amount": 1000,
+      "amount": 3000,
       "description": "아이스크림",
       "createdBy": "유저2",
       "userId": "byebye"
@@ -47,7 +47,7 @@
     },
     {
       "id": "25600f72-97p2-14a7-a9c2-47363950e2t8",
-      "date": "2024-02-02",
+      "date": "2024-02-05",
       "item": "미용",
       "amount": 155000,
       "description": "미용실",

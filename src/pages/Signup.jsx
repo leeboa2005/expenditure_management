@@ -59,16 +59,18 @@ const SignUpForm = styled.div`
             color: #cf0606;
             font-size: 14px;
             margin-bottom: 5px;
+            word-break: keep-all;
+            line-height: 1.3;
         }
     }
 `;
 
 const Signup = () => {
-    const [nickname, setNickname] = useState('');
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [errors, setErrors] = useState({});
+    const [nickname, setNickname] = useState(''); // 닉네임 상태
+    const [id, setId] = useState(''); // 아이디 상태
+    const [password, setPassword] = useState(''); // 비밀번호 상태
+    const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
+    const [errors, setErrors] = useState({}); // 에러 상태
     const navigate = useNavigate();
 
     // 유효성 검사 함수
@@ -127,6 +129,7 @@ const Signup = () => {
                 alert('회원가입 실패하였습니다.');
             }
         } catch (error) {
+            // 409 에러 처리
             if (error.response && error.response.status === 409) {
                 alert('이미 존재하는 아이디 또는 닉네임입니다. 다른 아이디 또는 닉네임을 사용하세요.');
             } else {

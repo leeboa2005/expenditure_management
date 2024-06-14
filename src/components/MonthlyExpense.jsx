@@ -44,8 +44,8 @@ const MonthlyExpense = ({ selectedMonth, onChangeMonth }) => {
                 {monthArr.map((month) => (
                     <StyledMonthlyBtn
                         key={month}
-                        $active={selectedMonth === month}
-                        onClick={() => onChangeMonth(month)}
+                        $active={selectedMonth === month} // 활성화 상태 확인
+                        onClick={() => onChangeMonth(month)} // 월 변경 함수 호출
                     >
                         {month}월
                     </StyledMonthlyBtn>

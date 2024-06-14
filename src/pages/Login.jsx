@@ -116,8 +116,8 @@ const Login = () => {
                         accessToken: data.accessToken,
                     })
                 );
-                localStorage.setItem('accessToken', data.accessToken);
-                dispatch(login(data.accessToken));
+                localStorage.setItem('accessToken', data.accessToken); // 토큰 저장
+                dispatch(login(data.accessToken)); // 로그인 상태 업데이트
                 navigate('/');
             } else {
                 alert('로그인 실패했습니다.');

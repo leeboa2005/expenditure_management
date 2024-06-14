@@ -1,37 +1,62 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { loginApi } from '../../axios/api';
 
+// 초기 상태
 const initialState = {
-    isAuthenticated: false,
-    token: null,
+    isAuthenticated: !!localStorage.getItem('accessToken'),
 };
+
+// 유효한 토큰인지 확인하는 비동기 액션
+export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWithValue }) => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        return rejectWithValue('No token found');
+    }
+
+    try {
+        const response = await loginApi.get('/verifyToken', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (response.data.valid) {
+            return response.data;
+        } else {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
+            return rejectWithValue('Invalid token');
+        }
+    } catch (error) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        return rejectWithValue('Invalid token');
+    }
+});
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
+        login: (state) => {
             state.isAuthenticated = true;
-            state.token = action.payload;
-            localStorage.setItem('accessToken', action.payload);
         },
         logout: (state) => {
             state.isAuthenticated = false;
-            state.token = null;
             localStorage.removeItem('accessToken');
             localStorage.removeItem('user');
         },
-        checkAuth: (state) => {
-            const token = localStorage.getItem('accessToken');
-            if (token) {
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(checkAuth.fulfilled, (state) => {
                 state.isAuthenticated = true;
-                state.token = token;
-            } else {
+            })
+            .addCase(checkAuth.rejected, (state) => {
                 state.isAuthenticated = false;
-                state.token = null;
-            }
-        },
+            });
     },
 });
 
-export const { login, logout, checkAuth } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;
