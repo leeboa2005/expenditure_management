@@ -32,20 +32,12 @@ const Home = () => {
 
     const filteredExpenseData = expenseData.filter((item) => new Date(item.date).getMonth() + 1 === selectedMonth);
 
-    if (status === 'loading') {
-        return <div>로딩 중...</div>;
-    }
-
-    if (status === 'error') {
-        return <div>에러가 발생했습니다.</div>;
-    }
-
     return (
         <StyledHome>
             <ExpenseForm onExpenseData={onExpenseData} />
-            <ExpenseGraph expenseData={expenseData} selectedMonth={selectedMonth} />
+            <ExpenseGraph selectedMonth={selectedMonth} />
             <MonthlyExpense selectedMonth={selectedMonth} onChangeMonth={onChangeMonth} />
-            <ExpenseHistory expenseData={filteredExpenseData} />
+            <ExpenseHistory expenseData={filteredExpenseData} status={status} />
         </StyledHome>
     );
 };

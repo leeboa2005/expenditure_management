@@ -117,6 +117,8 @@ const Login = () => {
                     })
                 );
                 localStorage.setItem('accessToken', data.accessToken); // 토큰 저장
+                console.log('Stored accessToken:', localStorage.getItem('accessToken')); // 로그 추가
+
                 dispatch(login(data.accessToken)); // 로그인 상태 업데이트
                 navigate('/');
             } else {

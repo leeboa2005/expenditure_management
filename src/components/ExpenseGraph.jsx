@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import icons from '../assets/graph/icons';
+import SkeletonBar from '../assets/styles/skeleton/Bar';
+import SkeletonCircle from '../assets/styles/skeleton/Circle';
+import { fetchExpenses } from '../axios/expenseApi';
 
 const COLORS = [
     '#93CDE9',
@@ -35,9 +38,7 @@ const BarContainer = styled.div`
 
 const Bar = styled.div`
     margin-right: 7px;
-    //배경색을 props로 전달받은 color 값으로 설정
     background-color: ${(props) => props.color};
-    // bar 컴포넌트의 너비를 props로 전달받은 width 값의 백분율로 설정
     width: ${(props) => props.width}%;
     height: 30px;
     border-radius: 10px;
@@ -82,7 +83,6 @@ const ImageContainer = styled.div`
     width: 40px;
     height: 40px;
     margin-right: 5px;
-    // props로 전달된 color 값을 설정
     background-color: ${(props) => props.color};
     border-radius: 50%;
     display: flex;
@@ -112,15 +112,10 @@ const ImageContainer = styled.div`
     }
 `;
 
-const ExpenseGraph = ({ expenseData = [], selectedMonth }) => {
+const ExpenseGraph = ({ selectedMonth }) => {
+    const [expenseData, setExpenseData] = useState([]); // API로부터 받아온 지출 데이터를 저장
     const [animationReady, setAnimationReady] = useState(false);
-
-    // 데이터 변경 시 애니메이션 초기화
-    useEffect(() => {
-        setAnimationReady(false);
-        const timeout = setTimeout(() => setAnimationReady(true), 200);
-        return () => clearTimeout(timeout);
-    }, [expenseData, selectedMonth]);
+    const [loading, setLoading] = useState(true);
 
     // 선택된 월의 데이터 필터링
     const filteredExpenseData = expenseData.filter((item) => {
@@ -143,10 +138,43 @@ const ExpenseGraph = ({ expenseData = [], selectedMonth }) => {
     const sortedData = Object.entries(categorizedData).sort(([, amountA], [, amountB]) => amountB - amountA);
     const totalAmount = Object.values(categorizedData).reduce((accumulated, amount) => accumulated + amount, 0);
 
+    // 데이터 변경 시 애니메이션 초기화
+    useEffect(() => {
+        setLoading(true);
+        setAnimationReady(false);
+
+        const loadExpenses = async () => {
+            try {
+                const data = await fetchExpenses();
+                setExpenseData(data);
+                setLoading(false);
+                setTimeout(() => setAnimationReady(true), 300);
+            } catch (error) {
+                console.error('그래프 데이터 로딩 실패', error);
+                setLoading(false);
+            }
+        };
+        loadExpenses();
+    }, [selectedMonth]);
+
+    if (loading) {
+        // 로딩 중일 때 Skeleton 컴포넌트를 표시
+        const skeletons = [];
+        for (let i = 0; i < 4; i++) {
+            skeletons.push(
+                <BarContainer key={i}>
+                    <SkeletonCircle />
+                    <SkeletonBar />
+                </BarContainer>
+            );
+        }
+        return <GraphContainer>{skeletons}</GraphContainer>;
+    }
+
     return (
         <GraphContainer>
-            {Object.keys(categorizedData).length === 0 ? (
-                <NoDataMessage>그래프로 표현할 데이터가 없습니다.</NoDataMessage>
+            {sortedData.length === 0 ? (
+                <NoDataMessage>지출 데이터가 없습니다.</NoDataMessage>
             ) : (
                 sortedData.map(([item, amount], index) => {
                     const selectedColor = COLORS[index % COLORS.length];
@@ -174,7 +202,6 @@ const ExpenseGraph = ({ expenseData = [], selectedMonth }) => {
 };
 
 ExpenseGraph.propTypes = {
-    expenseData: PropTypes.array.isRequired,
     selectedMonth: PropTypes.number.isRequired,
 };
 

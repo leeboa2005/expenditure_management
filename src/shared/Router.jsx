@@ -8,7 +8,7 @@ import Login from '../pages/Login';
 import BasicLayout from './BasicLayout';
 import ContentLayout from './ContentLayout';
 import MyPage from '../pages/Mypage';
-import { checkAuth, logout } from '../redux/modules/authSlice';
+import { checkAuth } from '../redux/modules/authSlice';
 
 const Router = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // 인증 상태를 가져옴
@@ -18,9 +18,8 @@ const Router = () => {
         // 컴포넌트가 마운트될 때 인증 상태를 확인
         dispatch(checkAuth())
             .unwrap()
-            .catch(() => {
-                // 인증 실패 시 로그아웃 처리
-                dispatch(logout());
+            .catch((error) => {
+                console.error('Auth check failed:', error);
             });
     }, [dispatch]);
 
