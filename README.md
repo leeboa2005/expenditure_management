@@ -1,6 +1,8 @@
-# Project Name
+# 프로젝트 이름
+<img src="public/logo.png" width="190" />
 
-![Logo](public/logo.png)
+## 데모 
+<img src="https://github.com/leeboa2005/expenditure_management/assets/71476841/2dde4212-08b2-4427-9af6-13c3d6659d48" width="800" />
 
 ## 소개
 
