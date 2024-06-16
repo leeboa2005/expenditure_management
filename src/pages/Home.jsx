@@ -13,7 +13,7 @@ const StyledHome = styled.div`
 `;
 
 const Home = () => {
-    const { data: expenseData = [], status } = useExpenses();
+    const { data: expenseData = [] } = useExpenses();
     const addExpenseMutation = useAddExpense();
 
     const onExpenseData = (data) => {
@@ -37,7 +37,7 @@ const Home = () => {
             <ExpenseForm onExpenseData={onExpenseData} />
             <ExpenseGraph selectedMonth={selectedMonth} />
             <MonthlyExpense selectedMonth={selectedMonth} onChangeMonth={onChangeMonth} />
-            <ExpenseHistory expenseData={filteredExpenseData} status={status} />
+            <ExpenseHistory expenseData={filteredExpenseData} />
         </StyledHome>
     );
 };

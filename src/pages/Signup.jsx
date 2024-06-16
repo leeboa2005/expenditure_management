@@ -133,7 +133,7 @@ const Signup = () => {
             if (error.response && error.response.status === 409) {
                 alert('이미 존재하는 아이디 또는 닉네임입니다. 다른 아이디 또는 닉네임을 사용하세요.');
             } else {
-                console.error('Signup error:', error);
+                console.error('회원가입 에러:', error);
                 alert('회원가입 실패하였습니다.');
             }
         }

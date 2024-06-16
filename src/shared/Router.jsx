@@ -19,7 +19,7 @@ const Router = () => {
         dispatch(checkAuth())
             .unwrap()
             .catch((error) => {
-                console.error('Auth check failed:', error);
+                console.error('인증 확인 실패:', error);
             });
     }, [dispatch]);
 

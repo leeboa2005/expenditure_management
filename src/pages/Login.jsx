@@ -125,7 +125,7 @@ const Login = () => {
                 alert('로그인 실패했습니다.');
             }
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('로그인 에러:', error);
             alert('로그인 실패했습니다.');
         }
     };
