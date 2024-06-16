@@ -24,7 +24,9 @@ src/
 │   │   └── icons.jsx
 │   └── styles/
 │       ├── skeleton/
-│       │   └── GlobalStyle.jsx
+│       │   ├── Bar.js
+│       │   └── Circle.js
+│       │ 
 │       └── GlobalStyle.jsx
 ├── axios/
 │   ├── api.js
@@ -36,6 +38,8 @@ src/
 │   ├── Footer.jsx
 │   ├── Header.jsx
 │   ├── MonthlyExpense.jsx
+├── config/
+│   ├── queryClient.js
 ├── hooks/
 │   ├── useAuth.js
 │   ├── useExpenseDetail.js
