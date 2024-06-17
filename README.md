@@ -62,7 +62,8 @@ src/
 │   ├── BasicLayout.jsx
 │   ├── ContentLayout.jsx
 │   ├── Router.jsx
-│   └── App.jsx
+├──  App.jsx
+├──  main.jsx
 ├── .env.example
 ├── .eslintrc.js
 ├── .gitignore
