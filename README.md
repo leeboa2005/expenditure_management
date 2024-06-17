@@ -81,9 +81,16 @@ src/
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/29bd87fd-44aa-4afb-895d-36a8676d57cd)
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/804dc112-8479-434f-bd85-c74732357347)
 
-## 배포 
+## json-server
+[링크](https://github.com/leeboa2005/expenses-json-server)
+
+## 배포 방법 
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/4616902c-df5f-442c-b97f-6203fa35e6ad)
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/94e44861-6682-4524-ba66-8feef390b23f)
+
+## 배포 링크
+[Hello Money](https://expenditure-management-phi.vercel)
+
 
 ## 설치 및 실행
 
