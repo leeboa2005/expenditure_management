@@ -73,6 +73,9 @@ src/
 ├── vercel.json
 └── vite.config.js
 ```
+## json-server
+[링크](https://github.com/leeboa2005/expenses-json-server)
+
  ## 사용 기술 
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/4b274a1b-323d-4bc4-8c72-6c72d77169e9)
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/772f3e0c-ed87-403f-a973-8986b27b0613)
@@ -80,9 +83,6 @@ src/
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/294ef4c9-549c-4d66-b082-0aa3b937a61f)
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/29bd87fd-44aa-4afb-895d-36a8676d57cd)
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/804dc112-8479-434f-bd85-c74732357347)
-
-## json-server
-[링크](https://github.com/leeboa2005/expenses-json-server)
 
 ## 배포 방법 
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/4616902c-df5f-442c-b97f-6203fa35e6ad)
