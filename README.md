@@ -89,7 +89,7 @@ src/
 ![image](https://github.com/leeboa2005/expenditure_management/assets/71476841/94e44861-6682-4524-ba66-8feef390b23f)
 
 ## 배포 링크
-[Hello Money](https://expenditure-management-phi.vercel)
+[Hello Money](https://expenditure-management-phi.vercel.app/)
 
 
 ## 설치 및 실행
